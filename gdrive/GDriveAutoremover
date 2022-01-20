@@ -6,7 +6,7 @@
 gdrive_dir="/tmp/sd/yi-hack/gdrive/"
 gdrive_bin_dir="/tmp/sd/yi-hack/bin/"
 gdrive_lib_dir="/tmp/sd/yi-hack/lib/"
-total_space=0
+total_space=10737418240
 used_space=0
 sleep_time=0
 log=${gdrive_dir}log/GDriveAutoremover.log
@@ -161,7 +161,8 @@ get_space_info(){
 		wait_until_proper_hours
 		curl --insecure -s --max-time 100 -H "Host: www.googleapis.com" -H "Authorization: Bearer ${access_token}" --request GET  -o ${gdrive_dir}tmp/spaceInfo "https://www.googleapis.com/drive/v2/about?fields=quotaBytesTotal,quotaBytesUsedAggregate" > /dev/null
 		if [ -f "${gdrive_dir}tmp/spaceInfo" ]; then
-			total_space=$(cat "${gdrive_dir}tmp/spaceInfo" | ${gdrive_dir}./JSON.sh -b | grep -E '\["quotaBytesTotal"\]' | sed 's/\[.*\][^\"0-9tf]*//g' | sed 's/\"//g')
+			#total_space=$(cat "${gdrive_dir}tmp/spaceInfo" | ${gdrive_dir}./JSON.sh -b | grep -E '\["quotaBytesTotal"\]' | sed 's/\[.*\][^\"0-9tf]*//g' | sed 's/\"//g')
+			total_space=10737418240
 			used_space=$(cat "${gdrive_dir}tmp/spaceInfo" | ${gdrive_dir}./JSON.sh -b | grep -E '\["quotaBytesUsedAggregate"\]' | sed 's/\[.*\][^\"0-9tf]*//g' | sed 's/\"//g')
 			if [ "${total_space}" = "" ] || [ "${used_space}" = "" ]; then
 				response_code=$(cat "${gdrive_dir}tmp/spaceInfo" | ${gdrive_dir}./JSON.sh -b | grep -E '\["error","code"\]' | sed 's/\[.*\][^\"0-9tf]*//g' | sed 's/\"//g')
